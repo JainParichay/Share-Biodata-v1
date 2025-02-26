@@ -23,6 +23,7 @@
     "google-auth-library": "^9.15.1",
     "googleapis": "^144.0.0",
     "node-cache": "^5.1.2",
-    "redis": "^4.7.0"
+    "redis": "^4.7.0",
+    "node-fetch": "^3.3.0"
   }
 }
