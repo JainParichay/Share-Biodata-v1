@@ -145,6 +145,22 @@ class ShareLink {
     const keys = await this.client.keys("shareLinks:*");
     return keys.length;
   }
+
+  async countUsersSessions() {
+    const keys = await this.client.keys("sess:*");
+    return keys.length;
+  }
+
+  async getRecentUsersSessions() {
+    const keys = await this.client.keys("sess:*");
+    const sessions = await Promise.all(
+      keys.map(async (key) => {
+        const data = await this.client.get(key);
+        return JSON.parse(data);
+      })
+    );
+    return sessions;
+  }
 }
 
 // Export a singleton instance

@@ -95,6 +95,25 @@ class AuthMiddleware {
     }
     next();
   }
+
+  async updateLastVisit(req, res, next) {
+    try {
+      if (!req.session || !req.session.user) {
+        return res.redirect("/auth/login");
+      }
+
+      // Only update lastVisit without modifying session expiry
+      const originalExpires = req.session.cookie.expires;
+      req.session.lastVisit = new Date();
+      req.session.cookie.expires = originalExpires;
+
+      await new Promise((resolve) => req.session.save(resolve));
+      next();
+    } catch (error) {
+      console.error("Auth middleware error:", error);
+      res.redirect("/auth/login");
+    }
+  }
 }
 
 // Export a singleton instance

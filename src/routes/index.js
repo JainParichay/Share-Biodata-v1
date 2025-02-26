@@ -13,6 +13,7 @@ router.get(
   "/",
   authMiddleware.requireAuth,
   adminMiddleware.isAdmin,
+  authMiddleware.updateLastVisit,
   async (req, res) => {
     if (!req.session) {
       return res.status(500).json({ error: "Session not initialized" });
@@ -20,14 +21,6 @@ router.get(
 
     // Generate a secure component token
     const componentToken = crypto.randomBytes(32).toString("hex");
-
-    // Get share links data
-    const allShareLinks = await shareLinks.getAll();
-    const totalLinks = await shareLinks.getSharedLinksCount();
-    const totalPdfViews = await shareLinks.getAllCounterPdf();
-    const activeLinks = allShareLinks.filter(
-      (link) => !link.expiresAt || new Date(link.expiresAt) > new Date()
-    ).length;
 
     // Store the token in session and wait for it to save
     req.session.componentToken = componentToken;
@@ -38,10 +31,6 @@ router.get(
       componentToken,
       adminKey: req.query.adminKey || "",
       path: "/admin",
-      shareLinks: allShareLinks,
-      totalLinks,
-      totalPdfViews,
-      activeLinks,
     });
   }
 );
@@ -50,7 +39,17 @@ router.get(
 router.use("/auth", authRoutes);
 router.use("/api", componentRoutes);
 
-router.use("/pdf", authMiddleware.requireAuth, pdfRoutes);
-router.use("/share", authMiddleware.requireAuth, sharedRoutes);
+router.use(
+  "/pdf",
+  authMiddleware.requireAuth,
+  authMiddleware.updateLastVisit,
+  pdfRoutes
+);
+router.use(
+  "/share",
+  authMiddleware.requireAuth,
+  authMiddleware.updateLastVisit,
+  sharedRoutes
+);
 
 export default router;

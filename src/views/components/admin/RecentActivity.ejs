@@ -1,4 +1,73 @@
 <div class="p-6">
-  <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
-  <p class="text-gray-500">No recent activity to display.</p>
+  <h3 class="text-lg font-semibold mb-4">Recent Visitors</h3>
+  <div class="overflow-x-auto">
+    <div class="flow-root">
+      <ul role="list" class="-mb-8">
+        <% recentActivity.forEach((session, index) => { %>
+        <li>
+          <div class="relative pb-8">
+            <% if (index !== recentActivity.length - 1) { %>
+            <span
+              class="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
+              aria-hidden="true"
+            ></span>
+            <% } %>
+            <div class="relative flex items-start space-x-3">
+              <div class="relative">
+                <img
+                  class="h-10 w-10 rounded-full bg-gray-400 flex items-center justify-center ring-8 ring-white"
+                  src="<%= session.user.picture %>"
+                  alt="<%= session.user.name %>"
+                />
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-sm">
+                  <div class="font-medium text-gray-900">
+                    <%= session.user.name %>
+                  </div>
+                  <p class="mt-0.5 text-sm text-gray-500">
+                    <%= session.user.email %>
+                  </p>
+                </div>
+                <div class="mt-2 text-sm text-gray-500">
+                  <p class="mt-1">
+                    Last Activity: <%= session.lastVisit ? new
+                    Date(session.lastVisit).toLocaleString('en-US', { year:
+                    'numeric', month: 'short', day: 'numeric', hour: '2-digit',
+                    minute: '2-digit' }) : new Date(new
+                    Date(session.cookie.expires).getTime() -
+                    session.cookie.originalMaxAge).toLocaleString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric', hour:
+                    '2-digit', minute: '2-digit' }) %>
+                  </p>
+                  <p class="mt-1 text-xs text-gray-400">
+                    Expires: <%= new
+                    Date(session.cookie.expires).toLocaleString('en-US', { year:
+                    'numeric', month: 'short', day: 'numeric', hour: '2-digit',
+                    minute: '2-digit' }) %>
+                  </p>
+                </div>
+              </div>
+              <div class="flex-shrink-0 self-center">
+                <% if (new Date(session.cookie.expires) > new Date()) { %>
+                <div
+                  class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700"
+                >
+                  Active
+                </div>
+                <% } else { %>
+                <div
+                  class="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-500"
+                >
+                  Expired
+                </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
 </div>

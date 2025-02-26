@@ -11,19 +11,20 @@
         <!-- Stats Cards Row -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <%- include('../components/LazyLoader', { component:
-          'admin/StatsCard', props: { title: 'Total Share Links', value:
-          totalLinks, icon: 'link' } }) %> <%-
-          include('../components/LazyLoader', { component: 'admin/StatsCard',
-          props: { title: 'Total PDF Views', value: totalPdfViews, icon:
-          'file-pdf' } }) %> <%- include('../components/LazyLoader', {
-          component: 'admin/StatsCard', props: { title: 'Active Links', value:
-          activeLinks, icon: 'check-circle' } }) %>
+          'admin/StatsCard', props: { title: 'Total Share Links', icon: 'link' }
+          }) %> <%- include('../components/LazyLoader', { component:
+          'admin/StatsCard', props: { title: 'Total PDF Views', icon: 'file-pdf'
+          } }) %> <%- include('../components/LazyLoader', { component:
+          'admin/StatsCard', props: { title: 'Active Links', icon:
+          'check-circle' } }) %> <%- include('../components/LazyLoader', {
+          component: 'admin/StatsCard', props: { title: 'Users Sessions',
+          icon: 'check-circle' } }) %>
         </div>
 
         <!-- Share Links Stats Table -->
         <div class="bg-white rounded-lg shadow mb-8">
           <%- include('../components/LazyLoader', { component:
-          'admin/ShareStats', props: { shareLinks } }) %>
+          'admin/ShareStats', props: {} }) %>
         </div>
 
         <!-- Recent Activity -->
