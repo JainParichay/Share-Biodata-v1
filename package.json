@@ -1,0 +1,28 @@
+{
+  "name": "db-biodata",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "biodata",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_OPTIONS=--openssl-provider=default node index.js",
+    "dev": "nodemon index.js --ext ejs,js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "compression": "^1.8.0",
+    "connect-redis": "^8.0.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "google-auth-library": "^9.15.1",
+    "googleapis": "^144.0.0",
+    "node-cache": "^5.1.2",
+    "redis": "^4.7.0"
+  }
+}

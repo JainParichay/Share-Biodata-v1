@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unauthorized Access - Biodata Listing</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .unauthorized-container {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .lock-icon {
+        font-size: 4.5rem;
+        color: #dc3545;
+        margin-bottom: 1.5rem;
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      .unauthorized-title {
+        font-size: 1.75rem;
+        color: #333;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .unauthorized-message {
+        color: #666;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .unauthorized-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1.75rem;
+        border-radius: 6px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background-color: #0066cc;
+        color: white;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background-color: #0052a3;
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background-color: #f8f9fa;
+        color: #333;
+        border: 1px solid #dee2e6;
+      }
+
+      .btn-secondary:hover {
+        background-color: #e9ecef;
+        transform: translateY(-1px);
+      }
+
+      .btn i {
+        font-size: 1.1rem;
+      }
+
+      .help-text {
+        margin-top: 2rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
+
+      .help-text a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+
+      .help-text a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 480px) {
+        .unauthorized-container {
+          padding: 2rem;
+        }
+
+        .unauthorized-actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .unauthorized-title {
+          font-size: 1.5rem;
+        }
+
+        .unauthorized-message {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="unauthorized-container">
+      <i class="fas fa-lock lock-icon"></i>
+      <h1 class="unauthorized-title">Unauthorized Access</h1>
+      <p class="unauthorized-message">
+        Sorry, you don't have permission to access this page. Please verify your
+        credentials or contact the administrator.
+      </p>
+      <div class="unauthorized-actions">
+        <button onclick="history.back()" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i>
+          Go Back
+        </button>
+      </div>
+      <p class="help-text">
+        Need help? <a href="mailto:mokshitjain18@gmail.com">Contact Support</a>
+      </p>
+    </div>
+  </body>
+</html>

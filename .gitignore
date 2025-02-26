@@ -1,0 +1,8 @@
+DS_Store
+node_modules
+.env
+package-lock.json
+credentials.json
+data/
+**/BiodataAppi
+rendered/

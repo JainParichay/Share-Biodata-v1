@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .mobile-preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background: #f5f5f5;
+        padding: 20px;
+      }
+
+      .pdf-icon {
+        font-size: 48px;
+        color: #ff4444;
+        margin-bottom: 15px;
+      }
+
+      .download-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: #0066cc;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .download-btn i {
+        font-size: 16px;
+      }
+
+      .preview-container {
+        min-height: 200px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .fallback {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background: #f5f5f5;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 0;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .logout-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #f8f9fa;
+        color: #666;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+
+      .logout-btn:hover {
+        background-color: #e9ecef;
+        color: #333;
+      }
+
+      .logout-btn i {
+        font-size: 1rem;
+      }
+
+      .file-card {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        background: white;
+      }
+
+      .file-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .file-icon {
+        color: #dc3545;
+        font-size: 24px;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <header><%- include('./components/Navbar', { user: user }) %></header>
+
+      <main class="container">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs">
+          <ol>
+            <% breadcrumbs.forEach((crumb, index) => { %>
+            <li>
+              <% if (index === breadcrumbs.length - 1) { %>
+              <span><%= crumb.name %></span>
+              <% } else { %>
+              <a href="/share/<%= token %>?folderId=<%= crumb.id %>"
+                ><%= crumb.name %></a
+              >
+              <% if (index < breadcrumbs.length - 1) { %>
+              <span class="breadcrumb-separator">›</span>
+              <% } %> <% } %>
+            </li>
+            <% }); %>
+          </ol>
+        </nav>
+
+        <% if (folders.length > 0 || files.length > 0) { %>
+        <!-- Folders Section -->
+        <% if (folders.length > 0) { %>
+        <section>
+          <h2 class="section-title">Folders</h2>
+          <div class="folder-grid">
+            <% folders.forEach(folder => { %>
+            <a
+              href="/share/<%= token %>?folderId=<%= folder.id %>"
+              class="folder-item"
+            >
+              <i class="fas fa-folder folder-icon"></i>
+              <span><%= folder.name %></span>
+            </a>
+            <% }); %>
+          </div>
+        </section>
+        <% } %>
+
+        <!-- Files Section -->
+        <% if (files.length > 0) { %>
+        <section>
+          <h2 class="section-title">Files</h2>
+          <div class="file-grid">
+            <% files.forEach(file => { %>
+            <article
+              class="file-card"
+              onclick="openPdfViewer('<%= file.id %>', '<%= file.name %>')"
+            >
+              <div class="file-content">
+                <div class="file-header">
+                  <h3 class="file-title"><%= file.name.replace(".pdf", "") %></h3>
+                  <p class="file-size"><%= file.formattedSize %></p>
+                </div>
+            </article>
+            <% }); %>
+          </div>
+        </section>
+        <% } %> <% } else { %>
+        <div class="empty-state">
+          <i class="fas fa-folder-open empty-icon"></i>
+          <h2 class="empty-title">No Files Found</h2>
+          <p class="empty-description">This folder is empty</p>
+        </div>
+        <% } %>
+      </main>
+    </div>
+
+    <script>
+      function openPdfViewer(fileId, fileName) {
+        // Open PDF viewer in a new tab/window
+        window.open(`/pdf/${fileId}?token=<%= token %>`, '_blank');
+      }
+    </script>
+  </body>
+</html>

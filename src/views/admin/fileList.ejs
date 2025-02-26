@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Files</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <!-- Header -->
+      <header>
+        <div class="container header-content">
+          <h1 class="header-title">PDF Documents</h1>
+          <div class="header-stats">
+            <%= folders.length %> folders, <%= files.length %> documents
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="container">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs">
+          <ol>
+            <% breadcrumbs.forEach((crumb, index) => { %>
+            <li>
+              <% if (index === breadcrumbs.length - 1) { %>
+              <span><%= crumb.name %></span>
+              <% } else { %>
+              <a href="/?adminKey=<%= adminKey %>&folderId=<%= crumb.id %>"
+                ><%= crumb.name %></a
+              >
+              <% if (index < breadcrumbs.length - 1) { %>
+              <span class="breadcrumb-separator">›</span>
+              <% } %> <% } %>
+            </li>
+            <% }); %>
+          </ol>
+        </nav>
+
+        <% if (folders.length > 0 || files.length > 0) { %>
+        <!-- Folders Section -->
+        <% if (folders.length > 0) { %>
+        <section>
+          <h2 class="section-title">Folders</h2>
+          <div class="folder-grid">
+            <% folders.forEach(folder => { %>
+            <a
+              href="/?adminKey=<%= adminKey %>&folderId=<%= folder.id %>"
+              class="folder-item"
+            >
+              <i class="fas fa-folder folder-icon"></i>
+              <div class="folder-details">
+                <div class="folder-name"><%= folder.name %></div>
+                <div class="folder-date">
+                  <%= new Date(folder.createdTime).toLocaleDateString() %>
+                </div>
+              </div>
+            </a>
+            <% }); %>
+          </div>
+        </section>
+        <% } %>
+
+        <!-- Files Section -->
+        <% if (files.length > 0) { %>
+        <section>
+          <h2 class="section-title">PDF Files</h2>
+          <div class="file-grid">
+            <% files.forEach(file => { %>
+            <article class="file-card">
+              <div class="preview-container">
+                <% if (file.previewUrl) { %>
+                <object data="<%= file.previewUrl %>" type="application/pdf">
+                  <div class="fallback">
+                    <p>Loading preview...</p>
+                  </div>
+                </object>
+                <% } else { %>
+                <div class="fallback">
+                  <i class="fas fa-file-pdf"></i>
+                </div>
+                <% } %>
+              </div>
+
+              <div class="file-content">
+                <div class="file-header">
+                  <h3 class="file-title"><%= file.name %></h3>
+                  <span class="file-size"><%= file.formattedSize %></span>
+                </div>
+
+                <div class="file-date">
+                  <i class="far fa-calendar-alt"></i>
+                  <%= new Date(file.createdTime).toLocaleDateString('en-US', {
+                  year: 'numeric', month: 'long', day: 'numeric' }) %>
+                </div>
+
+                <div class="file-actions">
+                  <a
+                    href="<%= file.previewUrl %>"
+                    target="_blank"
+                    class="btn btn-primary"
+                  >
+                    <i class="far fa-eye"></i>
+                    Preview
+                  </a>
+                  <a href="<%= file.downloadUrl %>" class="btn btn-secondary">
+                    <i class="fas fa-download"></i>
+                    Download
+                  </a>
+                </div>
+              </div>
+            </article>
+            <% }); %>
+          </div>
+        </section>
+        <% } %> <% } else { %>
+        <div class="empty-state">
+          <i class="fas fa-folder-open empty-icon"></i>
+          <h2 class="empty-title">No PDF Files Found</h2>
+          <p class="empty-description">
+            Share your PDF files with this service account to get started
+          </p>
+          <div class="email-container">
+            <p class="email-label">Service Account Email:</p>
+            <div class="email-box">
+              <code class="email-text"><%= serviceEmail %></code>
+              <button
+                onclick="copyEmail()"
+                class="copy-button"
+                title="Copy to clipboard"
+              >
+                <i class="far fa-copy"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </main>
+    </div>
+
+    <div id="toast" class="toast">Email copied to clipboard!</div>
+
+    <script>
+      function copyEmail() {
+        navigator.clipboard.writeText("<%= serviceEmail %>").then(() => {
+          const toast = document.getElementById("toast");
+          toast.classList.add("show");
+          setTimeout(() => {
+            toast.classList.remove("show");
+          }, 3000);
+        });
+      }
+    </script>
+  </body>
+</html>

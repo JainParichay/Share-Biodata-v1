@@ -1,0 +1,49 @@
+<h2 class="text-xl font-semibold mb-4">Shared Links Statistics</h2>
+<div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead>
+      <tr>
+        <th
+          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Name
+        </th>
+        <th
+          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Link Views
+        </th>
+        <th
+          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          PDF Views
+        </th>
+        <th
+          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Created At
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <% sharedLinks.forEach(link => { %>
+      <tr>
+        <td
+          class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+        >
+          <%= link.name %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <%= link.viewCount %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <%= link.pdfViews %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <%= new Date(link.createdAt).toLocaleDateString() %>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
