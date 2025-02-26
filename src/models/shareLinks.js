@@ -71,10 +71,21 @@ class ShareLink {
 
   async create({ folderId, name, expiresAt = null }) {
     try {
-      const token = crypto.randomBytes(16).toString("hex");
+      // Format the name to create a URL-friendly token
+      const token = name
+        .toLowerCase() // Convert to lowercase
+        .replace(/\.pdf$/, "") // Remove .pdf extension
+        .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric chars with hyphens
+        .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
+        .substring(0, 100); // Limit length to 100 chars
+
+      // Add a short random string to prevent conflicts
+      const uniqueToken = `${token}-${Math.random()
+        .toString(6)
+        .substring(2, 6)}`;
 
       const newLink = {
-        token,
+        token: uniqueToken,
         folderId,
         name,
         createdAt: new Date().toISOString(),
@@ -82,7 +93,7 @@ class ShareLink {
       };
 
       await this.client.set(
-        "shareLinks:" + token,
+        "shareLinks:" + uniqueToken,
         JSON.stringify(newLink),
         expiresAt
           ? { EX: Math.floor((new Date(expiresAt) - Date.now()) / 1000) }
