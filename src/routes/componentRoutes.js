@@ -1,35 +1,37 @@
 import express from "express";
-import { componentAuthMiddleware } from "../middlewares/index.js";
+import { componentAuthMiddleware } from "../middlewares/ComponentAuthMiddleware.js";
 
 const router = express.Router();
+
+// Map of valid components and their view paths
+const VALID_COMPONENTS = {
+  StatsCard: "components/admin/StatsCard",
+  ShareStats: "components/admin/ShareStats",
+  LinkClicksStats: "components/admin/LinkClicksStats",
+  RecentActivity: "components/admin/RecentActivity",
+  QuickActions: "components/admin/QuickActions",
+  Notifications: "components/admin/Notifications",
+};
 
 router.post(
   "/components/admin/:component",
   componentAuthMiddleware.verifyComponentRequest,
   async (req, res) => {
-    const { component } = req.params;
-    const props = req.body;
-
     try {
-      // Validate component name to prevent directory traversal
-      const allowedComponents = [
-        "StatsCard",
-        "RecentActivity",
-        "QuickActions",
-        "Notifications",
-      ];
-      if (!allowedComponents.includes(component)) {
-        throw new Error("Invalid component requested");
+      const componentName = req.params.component;
+      const viewPath = VALID_COMPONENTS[componentName];
+      if (!viewPath) {
+        return res.status(400).json({ error: "Invalid component requested" });
       }
 
-      // Render the component with its props
-      res.render(`admin/island/${component}`, {
-        ...props,
-        user: req.user, // Pass user data to components if needed
+      // Render the component with the provided props
+      res.render(viewPath, {
+        ...req.body,
+        layout: false,
       });
     } catch (error) {
       console.error("Error rendering component:", error);
-      res.status(500).json({ error: "Failed to load component" });
+      res.status(500).send("Error rendering component");
     }
   }
 );

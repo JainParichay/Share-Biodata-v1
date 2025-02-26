@@ -5,6 +5,7 @@ import componentRoutes from "./componentRoutes.js";
 import pdfRoutes from "./pdfRoutes.js";
 import sharedRoutes from "./sharedRoutes.js";
 import { adminMiddleware, authMiddleware } from "../middlewares/index.js";
+import shareLinks from "../models/shareLinks.js";
 
 const router = express.Router();
 
@@ -20,6 +21,14 @@ router.get(
     // Generate a secure component token
     const componentToken = crypto.randomBytes(32).toString("hex");
 
+    // Get share links data
+    const allShareLinks = await shareLinks.getAll();
+    const totalLinks = await shareLinks.getSharedLinksCount();
+    const totalPdfViews = await shareLinks.getAllCounterPdf();
+    const activeLinks = allShareLinks.filter(
+      (link) => !link.expiresAt || new Date(link.expiresAt) > new Date()
+    ).length;
+
     // Store the token in session and wait for it to save
     req.session.componentToken = componentToken;
     await new Promise((resolve) => req.session.save(resolve));
@@ -29,6 +38,10 @@ router.get(
       componentToken,
       adminKey: req.query.adminKey || "",
       path: "/admin",
+      shareLinks: allShareLinks,
+      totalLinks,
+      totalPdfViews,
+      activeLinks,
     });
   }
 );

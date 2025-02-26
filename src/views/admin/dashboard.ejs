@@ -9,14 +9,21 @@
     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
       <div class="container mx-auto px-6 py-8">
         <!-- Stats Cards Row -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <%- include('../components/LazyLoader', { component:
-          'admin/StatsCard', props: { title: 'Total Users', value: '1,234',
-          icon: 'users' } }) %> <%- include('../components/LazyLoader', {
-          component: 'admin/StatsCard', props: { title: 'Total Files', value:
-          '567', icon: 'files' } }) %> <%- include('../components/LazyLoader', {
-          component: 'admin/StatsCard', props: { title: 'Total Files', value:
-          '567', icon: 'files' } }) %>
+          'admin/StatsCard', props: { title: 'Total Share Links', value:
+          totalLinks, icon: 'link' } }) %> <%-
+          include('../components/LazyLoader', { component: 'admin/StatsCard',
+          props: { title: 'Total PDF Views', value: totalPdfViews, icon:
+          'file-pdf' } }) %> <%- include('../components/LazyLoader', {
+          component: 'admin/StatsCard', props: { title: 'Active Links', value:
+          activeLinks, icon: 'check-circle' } }) %>
+        </div>
+
+        <!-- Share Links Stats Table -->
+        <div class="bg-white rounded-lg shadow mb-8">
+          <%- include('../components/LazyLoader', { component:
+          'admin/ShareStats', props: { shareLinks } }) %>
         </div>
 
         <!-- Recent Activity -->
@@ -40,7 +47,7 @@
 <!-- Add this before closing body tag -->
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const componentToken = "<%= componentToken %>"; // Get token from server
+    const componentToken = "<%= componentToken %>";
 
     const loadComponent = async (element) => {
       const component = element.dataset.component;
@@ -56,14 +63,13 @@
             "X-Component-Token": componentToken,
           },
           body: JSON.stringify(props),
-          credentials: "include", // Changed from same-origin to include
+          credentials: "include",
         });
 
         if (response.ok) {
           const html = await response.text();
           element.innerHTML = html;
         } else if (response.status === 401) {
-          // Handle unauthorized access
           window.location.href = "/auth/login";
         } else {
           throw new Error(`Failed to load component: ${response.status}`);
@@ -75,7 +81,6 @@
       }
     };
 
-    // Load components when they become visible
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -88,7 +93,6 @@
       { rootMargin: "50px" }
     );
 
-    // Observe all lazy components
     document.querySelectorAll(".lazy-component").forEach((component) => {
       observer.observe(component);
     });

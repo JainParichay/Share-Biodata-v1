@@ -8,7 +8,9 @@ export const viewSharedFolder = async (req, res) => {
 
     let predata;
 
-    predata = await shareLinksModel.getCachedLink(token + folderId);
+    predata = await shareLinksModel.getCachedLink(
+      token + (folderId == undefined ? "" : "?folderId=" + folderId)
+    );
 
     if (!predata) {
       // If no cached version, render the page
@@ -118,7 +120,10 @@ export const viewSharedFolder = async (req, res) => {
         serviceEmail: " ",
       };
 
-      await shareLinksModel.cacheLink(token + folderId, predata);
+      await shareLinksModel.cacheLink(
+        token + (folderId == undefined ? "" : "?folderId=" + folderId),
+        predata
+      );
     }
 
     const host = req.get("host");

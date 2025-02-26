@@ -17,23 +17,39 @@ class ShareLink {
           const token = key.split(":")[1];
 
           // Get view count for this link
-          const viewCount =
-            (await this.client.get(`sharedLinkCounter:${token}`)) || 0;
+          const counters = await this.client.keys(
+            `sharedLinkCounter:${token}*`
+          );
+          let viewCount = 0;
+
+          // Properly handle async operations for counting views
+          if (counters.length > 0) {
+            const counts = await Promise.all(
+              counters.map((key) => this.client.get(key))
+            );
+            viewCount = counts.reduce(
+              (sum, count) => sum + (Number(count) || 0),
+              0
+            );
+          }
 
           // Get PDF views for files accessed through this link
           const pdfKeys = await this.client.keys(`pdfCounter:${token}:*`);
-          const pdfViews =
-            pdfKeys.length > 0
-              ? await Promise.all(pdfKeys.map((key) => this.client.get(key)))
-              : [];
-          const totalPdfViews = pdfViews.reduce(
-            (sum, views) => sum + Number(views || 0),
-            0
-          );
+          let totalPdfViews = 0;
+
+          if (pdfKeys.length > 0) {
+            const pdfCounts = await Promise.all(
+              pdfKeys.map((key) => this.client.get(key))
+            );
+            totalPdfViews = pdfCounts.reduce(
+              (sum, count) => sum + (Number(count) || 0),
+              0
+            );
+          }
 
           return {
             ...JSON.parse(data),
-            viewCount: Number(viewCount),
+            viewCount: viewCount,
             pdfViews: totalPdfViews,
           };
         })

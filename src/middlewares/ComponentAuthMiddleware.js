@@ -1,20 +1,23 @@
 class ComponentAuthMiddleware {
   async verifyComponentRequest(req, res, next) {
-    const componentToken = req.headers["x-component-token"];
+    try {
+      const componentToken = req.headers["x-component-token"];
 
-    // Check if token exists and matches session
-    if (!componentToken || componentToken !== req.session?.componentToken) {
-      return res.status(400).json({
-        error: "Unauthorized component request",
-        debug: {
-          hasToken: !!componentToken,
-          matches: componentToken === req.session?.componentToken,
-          sessionToken: req.session?.componentToken,
-        },
-      });
+      if (
+        !componentToken ||
+        !req.session ||
+        componentToken !== req.session.componentToken
+      ) {
+        return res
+          .status(401)
+          .json({ error: "Unauthorized component request" });
+      }
+
+      next();
+    } catch (error) {
+      console.error("Component auth error:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
-
-    next();
   }
 
   async verifyAdminComponentRequest(req, res, next) {
