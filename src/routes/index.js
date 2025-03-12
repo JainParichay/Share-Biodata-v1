@@ -45,6 +45,7 @@ router.use(
   authMiddleware.updateLastVisit,
   pdfRoutes
 );
+
 router.use(
   "/share",
   authMiddleware.requireAuth,

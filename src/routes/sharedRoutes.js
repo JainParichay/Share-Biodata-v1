@@ -8,7 +8,7 @@ import {
 import { adminMiddleware } from "../middlewares/AdminMiddleware.js";
 const router = express.Router();
 
-router.use("/:token", viewSharedFolder);
+router.get("/:token", viewSharedFolder);
 router.get("/", adminMiddleware.isAdmin, adminShareManager);
 router.post("/", adminMiddleware.isAdmin, createShareLink);
 router.delete("/:token", adminMiddleware.isAdmin, deleteShareLink);

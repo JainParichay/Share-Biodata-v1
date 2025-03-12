@@ -2,7 +2,7 @@
 
 <div class="flex h-screen bg-gray-100">
   <!-- Sidebar is critical, load immediately -->
-  <%- include('./island/Sidebar') %>
+  <%- include('../components/admin/Sidebar') %>
 
   <div class="flex-1 flex flex-col overflow-hidden">
     <!-- Main Content -->
@@ -13,12 +13,12 @@
           <%- include('../components/LazyLoader', { component:
           'admin/StatsCard', props: { title: 'Total Share Links', icon: 'link' }
           }) %> <%- include('../components/LazyLoader', { component:
-          'admin/StatsCard', props: { title: 'Total PDF Views', icon: 'file-pdf'
+          'admin/StatsCard', props: { title: 'Total PDF Opened', icon: 'file-pdf'
           } }) %> <%- include('../components/LazyLoader', { component:
           'admin/StatsCard', props: { title: 'Active Links', icon:
           'check-circle' } }) %> <%- include('../components/LazyLoader', {
-          component: 'admin/StatsCard', props: { title: 'Users Sessions',
-          icon: 'check-circle' } }) %>
+          component: 'admin/StatsCard', props: { title: 'Users Sessions', icon:
+          'check-circle' } }) %>
         </div>
 
         <!-- Share Links Stats Table -->

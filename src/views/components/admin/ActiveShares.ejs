@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      .share-link-card {
+        transition: opacity 0.3s ease;
+      }
+
+      .btn-icon:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-section" id="activeSharesSection">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="section-title">Active Share Links</h2>
+        <button
+          onclick="window.refreshActiveShares()"
+          class="btn btn-icon"
+          title="Refresh list"
+        >
+          <i class="fas fa-sync-alt"></i>
+        </button>
+      </div>
+
+      <div class="share-links-grid">
+        <% if (shareLinks.length > 0) { %> <% shareLinks.forEach(link => { %>
+        <div class="share-link-card">
+          <div class="share-link-header">
+            <h3><%= link.name %></h3>
+            <button
+              data-action="delete"
+              data-token="<%= link.token %>"
+              class="btn btn-icon text-red"
+              title="Delete share"
+              onclick="handlers.deleteShare('<%= link.token %>', this, '<%= adminKey %>')"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+
+          <div class="share-link-details">
+            <p>
+              <i class="far fa-clock"></i>
+              Created: <%= new Date(link.createdAt).toLocaleDateString() %>
+            </p>
+            <% if (link.expiresAt) { %>
+            <p>
+              <i class="fas fa-hourglass-end"></i>
+              Expires: <%= new Date(link.expiresAt).toLocaleDateString() %>
+            </p>
+            <% } %>
+          </div>
+
+          <div class="share-link-actions">
+            <div class="share-url-container">
+              <input
+                type="text"
+                readonly
+                value="<%= baseUrl %>/share/<%= link.token %>"
+                class="share-url-input"
+              />
+              <button
+                data-action="copy"
+                class="btn btn-icon"
+                title="Copy link"
+                onclick="handlers.copyShareUrl(this)"
+              >
+                <i class="far fa-copy"></i>
+              </button>
+            </div>
+            <a
+              href="/share/<%= link.token %>"
+              target="_blank"
+              class="btn btn-secondary btn-sm"
+            >
+              <i class="far fa-eye"></i>
+              Preview
+            </a>
+          </div>
+        </div>
+        <% }); %> <% } else { %>
+        <div class="empty-state">
+          <i class="fas fa-share-alt empty-icon"></i>
+          <h3>No Active Shares</h3>
+          <p>Create a share link to get started</p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

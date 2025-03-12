@@ -201,19 +201,9 @@
         <!-- Breadcrumbs -->
         <nav class="breadcrumbs">
           <ol>
-            <% breadcrumbs.forEach((crumb, index) => { %>
             <li>
-              <% if (index === breadcrumbs.length - 1) { %>
-              <span><%= crumb.name %></span>
-              <% } else { %>
-              <a href="/share/<%= token %>?folderId=<%= crumb.id %>"
-                ><%= crumb.name %></a
-              >
-              <% if (index < breadcrumbs.length - 1) { %>
-              <span class="breadcrumb-separator">›</span>
-              <% } %> <% } %>
+              <a href="/share/<%= token %>">Home</a>
             </li>
-            <% }); %>
           </ol>
         </nav>
 

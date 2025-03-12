@@ -71,6 +71,26 @@
         </tr>
         <% }); %>
       </tbody>
+      <tfoot class="bg-gray-50 font-semibold">
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap">
+            Total (<%= shareLinks.length %> links)
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <%= shareLinks.reduce((sum, link) => sum + (link.viewCount || 0), 0)
+            %>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <%= shareLinks.reduce((sum, link) => sum + (link.pdfViews || 0), 0)
+            %>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">-</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            Active: <%= shareLinks.filter(link => !link.expiresAt || new
+            Date(link.expiresAt) > new Date()).length %>
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>

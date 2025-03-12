@@ -1,0 +1,109 @@
+<div class="admin-section">
+  <h2 class="section-title">Create New Share</h2>
+  <form id="createShareForm" class="admin-form" method="POST">
+    <div class="form-group">
+      <label for="folderSelect">Select Folder</label>
+      <select id="folderSelect" name="folderId" required class="form-select">
+        <option value="">Choose a folder...</option>
+        <% folders.forEach(folder => { %>
+        <option value="<%= folder.id %>"><%= folder.fullPath %></option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="shareName">Share Name</label>
+      <input
+        type="text"
+        id="shareName"
+        name="name"
+        required
+        class="form-input"
+        placeholder="Enter a name for this share"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="expiresAt">Expires At (optional)</label>
+      <input
+        type="datetime-local"
+        id="expiresAt"
+        name="expiresAt"
+        class="form-input"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="submitBtn">
+      <i class="fas fa-share-alt"></i>
+      <span>Create Share Link</span>
+    </button>
+  </form>
+</div>
+
+<!-- <script>
+  (function () {
+    const form = document.getElementById("createShareForm");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const setLoading = (loading) => {
+      submitBtn.disabled = loading;
+      const span = submitBtn.querySelector("span");
+      const icon = submitBtn.querySelector("i");
+      if (loading) {
+        span.textContent = "Creating...";
+        icon.className = "fas fa-spinner fa-spin";
+      } else {
+        span.textContent = "Create Share Link";
+        icon.className = "fas fa-share-alt";
+      }
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setLoading(true);
+
+      const formData = new FormData(form);
+      const data = {
+        folderId: formData.get("folderId"),
+        name: formData.get("name"),
+        expiresAt: formData.get("expiresAt") || null,
+      };
+
+      try {
+        const response = await fetch("/share", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-key": "<%= adminKey %>",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(data),
+          redirect: "follow",
+          cache: "no-cache",
+        });
+
+        if (!response.ok) throw new Error("Failed to create share");
+
+        if (response.status === 201 || response.status === 200) {
+          form.reset();
+          window.showToast("Share link created successfully!");
+
+          const activeSharesComponent = document.querySelector(
+            '[data-component="admin/ActiveShares"]'
+          );
+          if (activeSharesComponent) {
+            window.refreshComponent(activeSharesComponent);
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        window.showToast("Failed to create share link", true);
+      } finally {
+        setLoading(false);
+      }
+
+      return false;
+    });
+  })();
+</script> -->
