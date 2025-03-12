@@ -40,7 +40,9 @@
           <%= link.pdfViews %>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          <%= new Date(link.createdAt).toLocaleDateString() %>
+          <%= new Date(link.createdAt).toLocaleString('en-IN', { timeZone:
+          'Asia/Kolkata', year: 'numeric', month: 'numeric', day: 'numeric',
+          hour: '2-digit', minute: '2-digit', hour12: true }) %>
         </td>
       </tr>
       <% }); %>
