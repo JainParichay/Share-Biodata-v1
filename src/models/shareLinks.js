@@ -15,7 +15,6 @@ class ShareLink {
         keys.map(async (key) => {
           const data = await this.client.get(key);
           const token = key.split(":")[1];
-
           // Get view count for this link
           const counters = await this.client.keys(
             `sharedLinkCounter:${token}*`

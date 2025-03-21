@@ -207,7 +207,15 @@
           </ol>
         </nav>
 
-        <% if (folders.length > 0 || files.length > 0) { %>
+        <!-- Add expiration info -->
+        <% if (expiresAt) { %>
+        <div class="alert alert-info mb-4" role="alert">
+          <i class="fas fa-clock me-2"></i>
+          Link will expire on: <%= new Date(expiresAt).toLocaleString('en-IN', {
+          timeZone: 'Asia/Kolkata', year: 'numeric', month: 'numeric', day:
+          'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) %>
+        </div>
+        <% } %> <% if (folders.length > 0 || files.length > 0) { %>
         <!-- Folders Section -->
         <% if (folders.length > 0) { %>
         <section>

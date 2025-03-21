@@ -65,15 +65,11 @@ export const viewSharedFolder = async (req, res) => {
       // If no cached version, render the page
       const link = await shareLinksModel.getByToken(token);
 
-      if (!link) {
-        return res.status(404).render("error", {
-          error: "Share link not found or has expired",
-        });
-      }
-
-      if (link.expiresAt && new Date(link.expiresAt) < new Date()) {
-        shareLinksModel.delete(token);
-        return res.status(410).render("error", {
+      if (!link || (link.expiresAt && new Date(link.expiresAt) < new Date())) {
+        if (link) {
+          shareLinksModel.delete(token);
+        }
+        return res.status(410).render("linkExpired", {
           error: "This share link has expired",
         });
       }
@@ -166,6 +162,7 @@ export const viewSharedFolder = async (req, res) => {
         isSharedView: true,
         token,
         serviceEmail: " ",
+        expiresAt: link.expiresAt,
       };
 
       await shareLinksModel.cacheLink(
@@ -177,6 +174,7 @@ export const viewSharedFolder = async (req, res) => {
     const host = req.get("host");
 
     const data = {
+      expiresAt: Date.now(),
       ...predata,
       host,
       user: req.user,

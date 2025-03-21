@@ -9,8 +9,12 @@ import shareLinks from "../models/shareLinks.js";
 
 const router = express.Router();
 
+router.get("/", (req, res) => {
+  res.render("landing");
+});
+
 router.get(
-  "/",
+  "/admin",
   authMiddleware.requireAuth,
   adminMiddleware.isAdmin,
   authMiddleware.updateLastVisit,
