@@ -6,6 +6,15 @@ class ShareLink {
     this.client = redisClient.getRedisClient();
   }
 
+  async listFolders() {
+    const folders = await this.client.get("driveFolders");
+    return JSON.parse(folders);
+  }
+
+  async setFolders(folders) {
+    await this.client.set("driveFolders", JSON.stringify(folders));
+  }
+
   async getAll() {
     try {
       const keys = await this.client.keys("shareLinks:*");

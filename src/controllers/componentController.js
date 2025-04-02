@@ -1,3 +1,5 @@
+import shareLinksModel from "../models/shareLinks.js";
+
 const getFolderPath = async (drive, folder) => {
   const path = [folder.name];
   let current = folder;
@@ -16,10 +18,13 @@ const getFolderPath = async (drive, folder) => {
     }
   }
   return path;
-}
-
+};
 
 export const listFolders = async (driveInstance) => {
+  const folders = await shareLinksModel.listFolders();
+  if (folders) {
+    return folders;
+  }
   const response = await driveInstance.files.list({
     q: "mimeType = 'application/vnd.google-apps.folder' and trashed = false",
     fields: "files(id, name, createdTime, parents)",
@@ -29,20 +34,20 @@ export const listFolders = async (driveInstance) => {
   const foldersWithPath = await Promise.all(
     response.data.files.map(async (folder) => {
       try {
-      const path = await getFolderPath(driveInstance, folder);
-      return {
-        ...folder,
-        fullPath: path.join(" > "),
-      };
-    } catch (error) {
-      console.error(`Error getting path for folder ${folder.name}:`, error);
-      return {
-        ...folder,
-        fullPath: folder.name,
-      };
+        const path = await getFolderPath(driveInstance, folder);
+        return {
+          ...folder,
+          fullPath: path.join(" > "),
+        };
+      } catch (error) {
+        console.error(`Error getting path for folder ${folder.name}:`, error);
+        return {
+          ...folder,
+          fullPath: folder.name,
+        };
       }
     })
   );
-
+  await shareLinksModel.setFolders(foldersWithPath);
   return foldersWithPath;
-}
+};

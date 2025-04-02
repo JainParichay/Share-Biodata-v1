@@ -219,12 +219,16 @@ export const adminShareManager = async (req, res) => {
 
 export const createShareLink = async (req, res) => {
   try {
-    const { folderId, name, expiresAt } = req.body;
+    console.log(req.body);
+    const { folderId, name, folderPath, expiresAt } = req.body;
 
     const link = await shareLinksModel.create({
       folderId,
       name,
-      expiresAt,
+      expiresAt: expiresAt
+        ? new Date(expiresAt)
+        : new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 1 week
+      folderPath: folderPath,
     });
     res.redirect("/share?adminKey=" + req.adminKey);
   } catch (error) {
