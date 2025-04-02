@@ -41,7 +41,7 @@ const emailContent = {
                     <li>Areas where we can improve</li>
                 </ul>
                 <p>Thank you for your time and support.</p>
-                <p>Best regards,<br>Mokshit Jain<br>Jain Malwa BioData Group</p>
+                <p>Best regards,<br>Mokshit Jain<br>Jain Parichay Biodata Group</p>
             </div>
 
             <hr style="border-top: 2px solid #eee;">

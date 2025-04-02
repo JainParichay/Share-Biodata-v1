@@ -13,6 +13,14 @@ router.get("/", (req, res) => {
   res.render("landing");
 });
 
+router.get("/terms", (req, res) => {
+  res.render("terms");
+});
+
+router.get("/privacy", (req, res) => {
+  res.render("privacy");
+});
+
 router.get(
   "/admin",
   authMiddleware.requireAuth,
