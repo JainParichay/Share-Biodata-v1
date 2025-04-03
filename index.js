@@ -20,7 +20,7 @@ async function startServer() {
     client: redisClient.getRedisClient(),
     prefix: "sess:",
     disableTouch: false,
-    ttl: 86400, // 1 day in seconds
+    ttl: 1000 * 60 * 60 * 24 * 30, // 1 month
   });
 
   // Middleware
@@ -43,7 +43,7 @@ async function startServer() {
       cookie: {
         secure: process.env.NODE_ENV === "production",
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
         sameSite: "lax",
         path: "/",
       },
