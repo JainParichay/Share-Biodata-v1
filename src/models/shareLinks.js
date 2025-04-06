@@ -12,7 +12,9 @@ class ShareLink {
   }
 
   async setFolders(folders) {
-    await this.client.set("driveFolders", JSON.stringify(folders));
+    await this.client.set("driveFolders", JSON.stringify(folders), {
+      EX: 3600,
+    });
   }
 
   async getAll() {
