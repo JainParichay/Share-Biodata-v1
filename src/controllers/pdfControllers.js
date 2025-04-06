@@ -142,3 +142,38 @@ export const getPdfStream = async (req, res) => {
     }
   }
 };
+
+export const downloadPdf = async (req, res) => {
+  try {
+    const { fileId } = req.params;
+    const drive = await driveService.getService();
+
+    const fileMetadata = await drive.files.get({
+      fileId,
+      fields: "id, name, mimeType, size",
+    });
+
+    if (fileMetadata.data.mimeType !== "application/pdf") {
+      return res.status(400).send("File is not a PDF");
+    }
+
+    const response = await drive.files.get(
+      {
+        fileId,
+        alt: "media",
+      },
+      { responseType: "stream" }
+    );
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${fileMetadata.data.name}"`
+    );
+
+    response.data.pipe(res);
+  } catch (error) {
+    console.error("Error downloading PDF:", error);
+    res.status(500).send("Error downloading PDF");
+  }
+};

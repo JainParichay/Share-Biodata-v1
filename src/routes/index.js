@@ -6,12 +6,15 @@ import pdfRoutes from "./pdfRoutes.js";
 import sharedRoutes from "./sharedRoutes.js";
 import { adminMiddleware, authMiddleware } from "../middlewares/index.js";
 import shareLinks from "../models/shareLinks.js";
+import { downloadPdf } from "../controllers/pdfControllers.js";
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
   res.render("landing");
 });
+
+router.get("/pdf-download/:fileId", downloadPdf);
 
 router.get("/terms", (req, res) => {
   res.render("terms");
