@@ -3,12 +3,38 @@ import { googleAuth } from "../config/googleAuth.js";
 
 const router = express.Router();
 
+// Helper function to convert string to title case
+function toTitleCase(str) {
+  if (!str) return "";
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 router.get("/login", (req, res) => {
   if (req.user) {
     const next = req.query.next || "/";
     return res.redirect(next);
   }
-  res.render("auth/login", { next: req.query.next });
+
+  let title = "Jain Parichay Biodata Group Login";
+
+  if (req.query.next) {
+    const nextPath = req.query.next
+      .replace("/share/", "")
+      .replace("/admin/", "")
+      .replace(/-/g, " ")
+      // Remove the last 4 numbers if they exist
+      .replace(/\d{4}$/, "");
+
+    title = "Jain Parichay Biodata Group - " + toTitleCase(nextPath);
+  }
+
+  res.render("auth/login", {
+    title,
+    next: req.query.next,
+  });
 });
 
 router.get("/google", (req, res) => {
