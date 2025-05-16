@@ -7,11 +7,14 @@ import { redisClient } from "./src/config/index.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import router from "./src/routes/index.js";
+import { handleAuthRoutes, withLogto } from "@logto/express";
+import configLogto from "./src/config/logto.js";
+import { expressAnalytics } from "node-api-analytics";
 
 async function startServer() {
   const app = express();
   const port = process.env.PORT || 3000;
-
+  app.use(expressAnalytics("90a2d895-f4c5-478f-82c3-bced93554ffe"));
   // Wait for Redis to be ready
   await redisClient.initRedis();
 
@@ -27,9 +30,9 @@ async function startServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static("public"));
-  app.use(cookieParser(process.env.SESSION_SECRET));
 
   // Session configuration
+  app.use(cookieParser());
   app.use(
     session({
       store: redisStore,
@@ -41,11 +44,10 @@ async function startServer() {
       unset: "keep",
       proxy: true,
       cookie: {
-        secure: process.env.NODE_ENV === "production",
+        maxAge: 14 * 24 * 60 * 60,
         httpOnly: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        path: "/",
       },
     })
   );
@@ -81,6 +83,8 @@ async function startServer() {
   //   next();
   // });
 
+  app.use(handleAuthRoutes(configLogto));
+
   // Set view engine
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
@@ -88,7 +92,7 @@ async function startServer() {
   app.set("views", join(__dirname, "src/views"));
 
   // Routes
-  app.use("/", router);
+  app.use("/", withLogto(configLogto), router);
 
   app.get("*", (req, res) => {
     res.status(404).render("404");

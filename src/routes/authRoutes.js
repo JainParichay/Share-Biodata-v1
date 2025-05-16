@@ -13,7 +13,7 @@ function toTitleCase(str) {
 }
 
 router.get("/login", (req, res) => {
-  if (req.user) {
+  if (req.user?.isAuthenticated) {
     const next = req.query.next || "/";
     return res.redirect(next);
   }
@@ -28,13 +28,16 @@ router.get("/login", (req, res) => {
       // Remove the last 4 numbers if they exist
       .replace(/\d{4}$/, "");
 
+    const returnTo = req.query.next;
     title = "Jain Parichay Biodata Group - " + toTitleCase(nextPath);
+
+    res.cookie("returnTo", returnTo, {
+      httpOnly: true,
+      maxAge: 5 * 60 * 1000, // 5 minutes
+    });
   }
 
-  res.render("auth/login", {
-    title,
-    next: req.query.next,
-  });
+  res.redirect("/logto/sign-in");
 });
 
 router.get("/google", (req, res) => {

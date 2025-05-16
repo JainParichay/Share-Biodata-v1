@@ -7,10 +7,12 @@ import sharedRoutes from "./sharedRoutes.js";
 import { adminMiddleware, authMiddleware } from "../middlewares/index.js";
 import shareLinks from "../models/shareLinks.js";
 import { downloadPdf } from "../controllers/pdfControllers.js";
+import { withLogto } from "@logto/express";
+import configLogto from "../config/logto.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", authMiddleware.postLogin, (req, res) => {
   res.render("landing");
 });
 
@@ -42,7 +44,7 @@ router.get(
     await new Promise((resolve) => req.session.save(resolve));
 
     res.render("admin/dashboard", {
-      user: req.user,
+      user: req.user.claims,
       componentToken,
       adminKey: req.query.adminKey || "",
       path: "/admin",

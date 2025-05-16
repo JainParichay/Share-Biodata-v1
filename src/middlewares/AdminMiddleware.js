@@ -11,7 +11,10 @@ class AdminMiddleware {
 
     // Check if user's email is in allowed list
     const allowedEmails = process.env.ADMIN_EMAILS?.split(",") || [];
-    if (!allowedEmails.includes(req.user.email)) {
+    if (
+      !allowedEmails.includes(req.user.claims.email) &&
+      req.user.claims.roles.includes("admin")
+    ) {
       return res.status(401).render("unauthorized", {
         serviceEmail: process.env.SERVICE_EMAIL,
       });
