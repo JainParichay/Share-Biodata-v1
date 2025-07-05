@@ -37,7 +37,7 @@ class GoogleAuth {
     });
   }
 
-  async getTokens(code) {
+  async getTokens(code, redirectUri = this.redirectUri) {
     try {
       // Exchange authorization code for access token
       const response = await axios.post(
@@ -46,7 +46,7 @@ class GoogleAuth {
           code,
           client_id: this.clientId,
           client_secret: this.clientSecret,
-          redirect_uri: this.redirectUri,
+          redirect_uri: redirectUri,
           grant_type: "authorization_code",
         },
         {

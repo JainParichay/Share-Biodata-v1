@@ -39,7 +39,9 @@ router.get("/login", (req, res) => {
 
 router.get("/google", (req, res) => {
   const next = req.query.next || "/";
-  const host = req.headers.host;
+  const host = req.headers.host
+    ? `https://${req.headers.host}/auth/google/callback`
+    : "";
   console.log("host", host);
   // Store the return URL in a cookie
   res.cookie("returnTo", next, {
@@ -61,8 +63,11 @@ router.get("/google/callback", async (req, res) => {
     });
   }
 
+  const host = req.headers.host ? `https://${req.headers.host}/auth/google/callback` : "";
+  console.log("host", host);
+
   try {
-    const tokens = await googleAuth.getTokens(code);
+    const tokens = await googleAuth.getTokens(code, host);
     if (!tokens?.id_token) {
       throw new Error("No ID token received from Google");
     }
