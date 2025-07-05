@@ -11,17 +11,21 @@ import { downloadPdf } from "../controllers/pdfControllers.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.render("landing");
+  return res.render("landing");
+});
+
+router.get("/health", (req, res) => {
+  return res.status(200).json({ message: "OK" });
 });
 
 router.get("/pdf-download/:fileId", downloadPdf);
 
 router.get("/terms", (req, res) => {
-  res.render("terms");
+  return res.render("terms");
 });
 
 router.get("/privacy", (req, res) => {
-  res.render("privacy");
+  return res.render("privacy");
 });
 
 router.get(
@@ -41,7 +45,7 @@ router.get(
     req.session.componentToken = componentToken;
     await new Promise((resolve) => req.session.save(resolve));
 
-    res.render("admin/dashboard", {
+    return res.render("admin/dashboard", {
       user: req.user,
       componentToken,
       adminKey: req.query.adminKey || "",
