@@ -12,9 +12,6 @@ class DriveService {
     console.log(str);
     console.log(str.replace("\\n", "\n").replace('\"', '"'));
     this.credentials = JSON.parse(str.replace(/\\n/g, "\n").replace('"', '"'));
-    this.credentials.private_key = this.credentials.private_key
-      .replace(/\\n/g, "\n")
-      .replace('"', '"');
   }
 
   async getService() {
