@@ -39,12 +39,14 @@ router.get("/login", (req, res) => {
 
 router.get("/google", (req, res) => {
   const next = req.query.next || "/";
+  const host = req.headers.host;
+  console.log("host", host);
   // Store the return URL in a cookie
   res.cookie("returnTo", next, {
     httpOnly: true,
     maxAge: 5 * 60 * 1000, // 5 minutes
   });
-  const authUrl = googleAuth.getAuthUrl();
+  const authUrl = googleAuth.getAuthUrl(`https://${host}/auth/google/callback`);
   res.redirect(authUrl);
 });
 
@@ -69,6 +71,8 @@ router.get("/google/callback", async (req, res) => {
     if (!user) {
       throw new Error("Failed to verify user token");
     }
+
+    console.log("user", user.name, "returnTo", returnTo);
 
     // Set cookie with ID token
     res.cookie("googleToken", tokens.id_token, {

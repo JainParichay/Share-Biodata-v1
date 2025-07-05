@@ -23,7 +23,7 @@ class GoogleAuth {
     });
   }
 
-  getAuthUrl() {
+  getAuthUrl(redirectUri = this.redirectUri) {
     return this.client.generateAuthUrl({
       access_type: "offline",
       scope: [
@@ -32,7 +32,7 @@ class GoogleAuth {
       ],
       include_granted_scopes: true,
       prompt: "consent",
-      redirect_uri: this.redirectUri,
+      redirect_uri: redirectUri,
       client_id: this.clientId,
     });
   }
