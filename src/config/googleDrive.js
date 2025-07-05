@@ -7,8 +7,10 @@ const __dirname = path.dirname(__filename);
 
 class DriveService {
   constructor() {
+    const str = process.env.CREDENTIALS;
     this.drive = null;
-    this.credentials = JSON.parse(process.env.CREDENTIALS);
+    console.log(str.replace(/\\n/g, "\n"));
+    this.credentials = JSON.parse(str.replace(/\\n/g, "\n"));
     this.credentials.private_key = this.credentials.private_key.replace(/\\n/g, "\n");
   }
 
