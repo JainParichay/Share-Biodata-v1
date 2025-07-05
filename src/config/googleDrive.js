@@ -9,9 +9,13 @@ class DriveService {
   constructor() {
     const str = process.env.CREDENTIALS;
     this.drive = null;
-    console.log(str.replace(/\\n/g, "\n"));
-    this.credentials = JSON.parse(str.replace(/\\n/g, "\n"));
-    this.credentials.private_key = this.credentials.private_key.replace(/\\n/g, "\n");
+    console.log(str);
+    console.log(str.replaceAll("\\n", "\n"));
+    this.credentials = JSON.parse(str.replace("\\n", "\n"));
+    this.credentials.private_key = this.credentials.private_key.replace(
+      "\\n",
+      "\n"
+    );
   }
 
   async getService() {
