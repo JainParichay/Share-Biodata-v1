@@ -5,7 +5,7 @@
   "description": "biodata",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_OPTIONS=--openssl-provider=default node index.js",
+    "start": "node index.js",
     "dev": "nodemon index.js --ext ejs,js"
   },
   "keywords": [],
