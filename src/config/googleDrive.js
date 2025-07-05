@@ -10,12 +10,11 @@ class DriveService {
     const str = process.env.CREDENTIALS;
     this.drive = null;
     console.log(str);
-    console.log(str.replaceAll("\\n", "\n"));
-    this.credentials = JSON.parse(str.replace("\\n", "\n"));
-    this.credentials.private_key = this.credentials.private_key.replace(
-      "\\n",
-      "\n"
-    );
+    console.log(str.replace("\\n", "\n").replace('\"', '"'));
+    this.credentials = JSON.parse(str.replace(/\\n/g, "\n").replace('"', '"'));
+    this.credentials.private_key = this.credentials.private_key
+      .replace(/\\n/g, "\n")
+      .replace('"', '"');
   }
 
   async getService() {
