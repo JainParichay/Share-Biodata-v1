@@ -7,11 +7,15 @@ const __dirname = path.dirname(__filename);
 
 class DriveService {
   constructor() {
-    const str = process.env.CREDENTIALS;
+    const base64Credentials = process.env.CREDENTIALS;
+
+    const jsonString = Buffer.from(base64Credentials, "base64").toString(
+      "utf-8"
+    );
+
+    this.credentials = JSON.parse(jsonString);
+
     this.drive = null;
-    console.log(str);
-    console.log(str.replace("\\n", "\n").replace('\"', '"'));
-    this.credentials = JSON.parse(str.replace(/\\n/g, "\n").replace('"', '"'));
   }
 
   async getService() {
