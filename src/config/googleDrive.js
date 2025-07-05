@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import path, { join } from "path";
 import { fileURLToPath } from "url";
 
@@ -9,9 +9,8 @@ const __dirname = path.dirname(__filename);
 class DriveService {
   constructor() {
     this.drive = null;
-    this.credentials = JSON.parse(
-      readFileSync(join(__dirname, "../../credentials.json"))
-    );
+    this.credentials = JSON.parse(process.env.CREDENTIALS);
+    console.log(this.credentials);
   }
 
   async getService() {
