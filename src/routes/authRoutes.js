@@ -48,7 +48,7 @@ router.get("/google", (req, res) => {
     httpOnly: true,
     maxAge: 5 * 60 * 1000, // 5 minutes
   });
-  const authUrl = googleAuth.getAuthUrl(`https://${host}/auth/google/callback`);
+  const authUrl = googleAuth.getAuthUrl(host);
   res.redirect(authUrl);
 });
 
