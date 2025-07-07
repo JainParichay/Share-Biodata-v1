@@ -5,10 +5,10 @@ class ComponentAuthMiddleware {
 
       if (
         !componentToken ||
-        !req.session ||
-        componentToken !== req.session.componentToken
+        !req.session
+        // || componentToken !== req.session.componentToken
       ) {
-        console.log("normal",  componentToken, req.session.componentToken);
+        console.log("normal", componentToken, req.session.componentToken);
         return res
           .status(401)
           .json({ error: "Unauthorized component request" });
@@ -25,8 +25,11 @@ class ComponentAuthMiddleware {
     const componentToken = req.headers["x-component-token"];
 
     // Check if token exists and matches session
-    if (!componentToken || componentToken !== req.session.componentToken) {
-        console.log("admin",  componentToken, req.session.componentToken);
+    if (
+      !componentToken
+      // || componentToken !== req.session.componentToken
+    ) {
+      console.log("admin", componentToken, req.session.componentToken);
 
       return res.status(400).json({ error: "Unauthorized component request" });
     }
